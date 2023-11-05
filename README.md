@@ -4,11 +4,12 @@
 Напишите запрос к учебной базе данных, который вернёт процентное отношение общего размера всех индексов к общему размеру всех таблиц.
 
 ```
-select sum(data_length) as SUM_Data_Length, sum(index_length) as SUM_Index_Length, sum(index_length)*100.0/sum(data_length) as Persentage_ratio
-from information_schema.tables
-where table_schema='sakila' and data_length is not null;
+SELECT  SUM(DATA_LENGTH) , SUM(INDEX_LENGTH),
+CONCAT(  ROUND ((SUM(INDEX_LENGTH) / SUM(DATA_LENGTH)) *100), ' %')  AS Отношение
+FROM INFORMATION_SCHEMA.TABLES
+WHERE  TABLE_SCHEMA = 'sakila';
 ```
-
+![alt text](https://github.com/SergeiShulga/121_2/blob/main/img/001.png)
 
 ### Задание 2
 Выполните explain analyze следующего запроса:
