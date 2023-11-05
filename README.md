@@ -9,7 +9,7 @@ CONCAT(  ROUND ((SUM(INDEX_LENGTH) / SUM(DATA_LENGTH)) *100), ' %')  AS Отно
 FROM INFORMATION_SCHEMA.TABLES
 WHERE  TABLE_SCHEMA = 'sakila';
 ```
-![alt text](https://github.com/SergeiShulga/121_2/blob/main/img/001.png)
+![alt text](https://github.com/SergeiShulga/12-5/tree/main/img/001.png)
 
 ### Задание 2
 Выполните explain analyze следующего запроса:
