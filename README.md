@@ -32,6 +32,35 @@ where date(p.payment_date) = '2005-07-30' and p.payment_date = r.rental_date and
 group by Full_name;
 ```
 ![alt text](https://github.com/SergeiShulga/12-5/blob/main/img/003.png)
+
+```
+SELECT
+    CONCAT(c.last_name, ' ', c.first_name) AS Full_name,
+    SUM(p.amount)
+FROM
+    payment p
+    JOIN rental r ON p.payment_date = r.rental_date
+    JOIN customer c ON r.customer_id = c.customer_id
+    JOIN inventory i ON r.inventory_id = i.inventory_id
+WHERE
+    p.payment_date >= '2005-07-30'
+    AND p.payment_date < DATEADD('2005-07-30', INTERVAL 1 DAY)
+GROUP BY Full_name;
+```
+
+```
+SELECT
+    CONCAT(c.last_name, ' ', c.first_name) AS Full_name,
+    SUM(p.amount)
+FROM
+    payment p
+CROSS JOIN
+    customer c
+WHERE
+    DATE p.payment_date < DATEADD('2005-07-30', INTERVAL 1 DAY)
+GROUP BY Full_name;
+```
+что то это не работает
 ### Задание 3*
 Самостоятельно изучите, какие типы индексов используются в PostgreSQL. Перечислите те индексы, которые используются в PostgreSQL, а в MySQL — нет.
 
