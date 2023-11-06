@@ -23,14 +23,15 @@ where date(p.payment_date) = '2005-07-30' and p.payment_date = r.rental_date and
 - перечислите узкие места;
 - оптимизируйте запрос: внесите корректировки по использованию операторов, при необходимости добавьте индексы.
 
-В запросе обрабатывают излишние таблицы а именно inventory, rental и film, обработка и присоединение этих таблиц не имеет смысла т.к. дальше данные не используются. Все необходимые данные есть в таблицах payment и customer, соответственно, остальные таблицы можно исключить. Предлагается оптимизировать запрос следующим образом:
+В запросе используется лишняя таблица film, так как данные из неё не используются. Все необходимые данные есть в таблицах payment и customer, соответственно, остальные таблицы можно исключить. Предлагается оптимизировать запрос следующим образом:
 
 ```
-select distinct concat(c.last_name, ' ', c.first_name), sum(p.amount) over (partition by c.customer_id)
-from payment p, customer c
-where date(p.payment_date) = '2005-07-30' and p.customer_id = c.customer_id 
+select  concat(c.last_name, ' ', c.first_name) as Full_name, sum(p.amount)
+from payment p, rental r, customer c, inventory i
+where date(p.payment_date) = '2005-07-30' and p.payment_date = r.rental_date and r.customer_id = c.customer_id and i.inventory_id = r.inventory_id
+group by Full_name;
 ```
-
+![alt text](https://github.com/SergeiShulga/12-5/blob/main/img/003.png)
 ### Задание 3*
 Самостоятельно изучите, какие типы индексов используются в PostgreSQL. Перечислите те индексы, которые используются в PostgreSQL, а в MySQL — нет.
 
