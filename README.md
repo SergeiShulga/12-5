@@ -17,7 +17,7 @@ WHERE  TABLE_SCHEMA = 'sakila';
 ```
 select distinct concat(c.last_name, ' ', c.first_name), sum(p.amount) over (partition by c.customer_id, f.title)
 from payment p, rental r, customer c, inventory i, film f
-where date(p.payment_date) = '2005-07-30' and p.payment_date = r.rental_date and r.customer_id = c.customer_id and i.inventory_id = r.inventory_id
+where date(p.payment_date) = '2005-07-30' and p.payment_date = r.rental_date and r.customer_id = c.customer_id and i.inventory_id = r.inventory_id;
 ```
 ![alt text](https://github.com/SergeiShulga/12-5/blob/main/img/002.png)
 - перечислите узкие места;
@@ -34,33 +34,37 @@ group by Full_name;
 ![alt text](https://github.com/SergeiShulga/12-5/blob/main/img/003.png)
 
 ```
+explain analyze
 SELECT
-    CONCAT(c.last_name, ' ', c.first_name) AS Full_name,
-    SUM(p.amount)
+CONCAT(c.last_name, ' ', c.first_name) AS Full_name,
+SUM(p.amount)
 FROM
-    payment p
-    JOIN rental r ON p.payment_date = r.rental_date
-    JOIN customer c ON r.customer_id = c.customer_id
-    JOIN inventory i ON r.inventory_id = i.inventory_id
+payment p
+JOIN rental r ON p.payment_date = r.rental_date
+JOIN customer c ON r.customer_id = c.customer_id
+JOIN inventory i ON r.inventory_id = i.inventory_id
 WHERE
-    p.payment_date >= '2005-07-30'
-    AND p.payment_date < DATEADD('2005-07-30', INTERVAL 1 DAY)
+p.payment_date >= '2005-07-30'
+AND p.payment_date < DATE_ADD('2005-07-30', INTERVAL 1 DAY)
 GROUP BY Full_name;
 ```
+![alt text](https://github.com/SergeiShulga/12-5/blob/main/img/004.png)
 
 ```
+explain analyze
 SELECT
-    CONCAT(c.last_name, ' ', c.first_name) AS Full_name,
-    SUM(p.amount)
+CONCAT(c.last_name, ' ', c.first_name) AS Full_name,
+SUM(p.amount)
 FROM
-    payment p
-CROSS JOIN
-    customer c
+payment p
+JOIN
+customer c ON p.customer_id = c.customer_id
 WHERE
-    DATE p.payment_date < DATEADD('2005-07-30', INTERVAL 1 DAY)
+p.payment_date < DATE_ADD('2005-07-30', INTERVAL 1 DAY)
 GROUP BY Full_name;
 ```
-что то это не работает
+![alt text](https://github.com/SergeiShulga/12-5/blob/main/img/005.png)
+
 ### Задание 3*
 Самостоятельно изучите, какие типы индексов используются в PostgreSQL. Перечислите те индексы, которые используются в PostgreSQL, а в MySQL — нет.
 
