@@ -33,38 +33,6 @@ group by Full_name;
 ```
 ![alt text](https://github.com/SergeiShulga/12-5/blob/main/img/003.png)
 
-```
-explain analyze
-SELECT
-CONCAT(c.last_name, ' ', c.first_name) AS Full_name,
-SUM(p.amount)
-FROM
-payment p
-JOIN rental r ON p.payment_date = r.rental_date
-JOIN customer c ON r.customer_id = c.customer_id
-JOIN inventory i ON r.inventory_id = i.inventory_id
-WHERE
-p.payment_date >= '2005-07-30'
-AND p.payment_date < DATE_ADD('2005-07-30', INTERVAL 1 DAY)
-GROUP BY Full_name;
-```
-![alt text](https://github.com/SergeiShulga/12-5/blob/main/img/004.png)
-
-```
-explain analyze
-SELECT
-CONCAT(c.last_name, ' ', c.first_name) AS Full_name,
-SUM(p.amount)
-FROM
-payment p
-JOIN
-customer c ON p.customer_id = c.customer_id
-WHERE
-p.payment_date < DATE_ADD('2005-07-30', INTERVAL 1 DAY)
-GROUP BY Full_name;
-```
-![alt text](https://github.com/SergeiShulga/12-5/blob/main/img/005.png)
-
 ### Задание 3*
 Самостоятельно изучите, какие типы индексов используются в PostgreSQL. Перечислите те индексы, которые используются в PostgreSQL, а в MySQL — нет.
 
